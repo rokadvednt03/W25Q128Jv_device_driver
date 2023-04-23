@@ -9,8 +9,8 @@
   ******************************************************************************
  **/
  
-#include "stm32f103xx_spi.h"
 
+#include "stm32f103xx_flash_w25q128jv.h"
 
 void SPI_PeriClockControl(SPI_TypeDef *pSPIx , uint32_t EnorDi)
 {
@@ -54,13 +54,12 @@ void SPI_Init(SPI_Handle_t *pSPIHandler)
 
 void SPI_SendData(SPI_TypeDef *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
 {
-	for(int i = 0 ; i < 100;i++);
-	SPI_Enable(pSPIx);
+	while(!(SPI1->SR & (1 << 1)));
+	while((SPI1->SR & (1 << 7)));
 	
 	while(Len > 0)
 	{
-		
-	
+		while(!(SPI1->SR & (1 << 1)));
 		if( (pSPIx->CR1 & (1 << 11) ) )
 		{
 			pSPIx->DR =   *((uint16_t*)pTxBuffer);
@@ -74,31 +73,36 @@ void SPI_SendData(SPI_TypeDef *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
 			pTxBuffer++;
 		}
 	}
-	SPI_Disable(pSPIx);
+
 }
 
 void SPI_ReceiveData(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
 {
 	while(Len > 0)
 		{
+			while(!(SPI1->SR & (1 << 1)));
+			while((SPI1->SR & (1 << 7)));
+			
+			SPI_SendByte(pSPIx,0xFF);
 			//1. wait until RXNE is set
-			while(!(pSPIx->SR & (SPI_SR_RXNE)));
-			//2. check the DFF bit in CR1
-			if( (pSPIx->CR1 & (SPI_CR1_DFF) ) )
-			{
-				//16 bit DFF
-				//1. load the data from DR to Rxbuffer address
-				 *((uint16_t*)pRxBuffer) = pSPIx->DR ;
-				Len--;
-				Len--;
-				(uint16_t*)pRxBuffer++;
-			}else
-			{
-				//8 bit DFF
-				*(pRxBuffer) = pSPIx->DR ;
-				Len--;
-				pRxBuffer++;
-			}
+				while(!(pSPIx->SR & (SPI_SR_RXNE)));
+				//2. check the DFF bit in CR1
+					if( (pSPIx->CR1 & (SPI_CR1_DFF) ) )
+					{
+							//16 bit DFF
+							//1. load the data from DR to Rxbuffer address
+							 *((uint16_t*)pRxBuffer) = pSPIx->DR ;
+							Len--;
+							Len--;
+							(uint16_t*)pRxBuffer++;
+					}
+					else
+					{
+							//8 bit DFF
+							*(pRxBuffer) = pSPIx->DR ;
+							Len--;
+							pRxBuffer++;
+					}
 		}
 
 }

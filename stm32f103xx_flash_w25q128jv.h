@@ -1,6 +1,8 @@
 #include "stm32f103xx_spi.h"
 #include "stm32f103xx_gpio.h"
 
+#define W25_dummy1 0xff
+#define W25_dummy2 0x00
 #define W25_write_Enable 0x06
 #define W25_volatile_write_enable 0x50
 #define W25_write_disable 0x04
@@ -11,6 +13,7 @@
 #define W25_read_uniqe_ID 0x4B
 
 #define W25_read_data 0x03
+#define W25_page_program 0x02
 
 #define W25_sector_erase_4K 0x20
 #define W25_block_erase_32K 0x52
@@ -28,12 +31,12 @@
 #define W25_reset1	0x66
 #define W25_reset2	0x99
 
+#define W25_memBlock2 0x020000
 
-
-void flash_enable(SPI_TypeDef *pSPIx);
-void flash_reset(void);
-void flash_erase(void);
-
+void W25_flash_enable(SPI_TypeDef *pSPIx);
+uint8_t W25_flash_read_statusREG(SPI_TypeDef *pSPIx ,uint8_t RegADDR);
+void W25_flash_erase(SPI_TypeDef *pSPIx);
+void W25_flash_reset(SPI_TypeDef *pSPIx);
 
 void SPI_SendByte(SPI_TypeDef *pSPIx,uint8_t byte);
-uint8_t SPI_NSS_retern(SPI_TypeDef *pSPIx);
+void delay(void);
