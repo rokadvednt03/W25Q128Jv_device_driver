@@ -21,18 +21,6 @@ void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx , uint8_t EnorDi)
 		{
 			RCC->APB2ENR |=(1<<5);
 		}
-		if(pGPIOx == GPIOE)
-		{
-			RCC->APB2ENR |=(1<<6);
-		}
-		if(pGPIOx == GPIOF)
-		{
-			RCC->APB2ENR |=(1<<7);
-		}
-		if(pGPIOx == GPIOG)
-		{
-			RCC->APB2ENR |=(1<<8);
-		}
 
 	}
 
@@ -179,3 +167,13 @@ void GPIO_PinEnDn(GPIO_TypeDef *pGPIOx,uint32_t PinNumber,uint32_t EnorDi)
 			pGPIOx->ODR |= (1 << PinNumber);
 		}
 }
+
+void GPIO_Set(GPIO_TypeDef *pGPIOx , uint32_t PinNumber)
+{
+	pGPIOx->ODR &= ~(1 << PinNumber);
+}
+void GPIO_ReSet(GPIO_TypeDef *pGPIOx , uint32_t PinNumber)
+{
+	pGPIOx->ODR |= (1 << PinNumber);
+}
+

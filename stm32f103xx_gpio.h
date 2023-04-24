@@ -97,3 +97,5 @@ void GPIO_IRQ_PR_Config(uint8_t IRQNumber, uint8_t IRQ_Priority);
 void GPIO_IRQHandling(uint8_t PinNumber);
 
 void GPIO_PinEnDn(GPIO_TypeDef *pGPIOx,uint32_t PinNumber,uint32_t EnorDi);
+void GPIO_Set(GPIO_TypeDef *pGPIOx , uint32_t PinNumber);
+void GPIO_ReSet(GPIO_TypeDef *pGPIOx , uint32_t PinNumber);

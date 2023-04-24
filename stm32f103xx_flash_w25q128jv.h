@@ -31,7 +31,7 @@
 #define W25_reset1	0x66
 #define W25_reset2	0x99
 
-#define W25_memBlock2 0x020000
+#define W25_memBlock2 0x000000
 
 void W25_flash_enable(SPI_TypeDef *pSPIx);
 uint8_t W25_flash_read_statusREG(SPI_TypeDef *pSPIx ,uint8_t RegADDR);

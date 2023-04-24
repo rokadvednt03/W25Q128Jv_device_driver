@@ -13,12 +13,13 @@ int main(void)
 	SPI_Conf();
 	GPIO_Conf();
 	
+/*		W25_Flash_read_status_reg();
+																delay();*/
+	/*	W25_flash_reset(SPI1);
+																delay();
 		W25_Flash_read_status_reg();
-																delay();
-		W25_flash_reset(SPI1);
-																delay();
-		W25_Flash_read_status_reg();
-																delay();
+																delay();*/
+
 		Flash_sendData();
 																delay();
 		W25_Flash_read_status_reg();
@@ -79,23 +80,25 @@ void SPI_Conf(void)
 void Flash_rcv_data(void)
 {
 	 uint8_t mem_addr;
-	delay();
+/*	delay();
 		SPI_Enable(SPI1);
 		W25_flash_enable(SPI1);
 	SPI_Disable(SPI1);
-	delay();
-		W25_Flash_read_status_reg();
+	delay();*/
+		//W25_Flash_read_status_reg();
 																delay();
 	//MEMORY_RCV_DATA
 	SPI_Enable(SPI1);
 			SPI_SendByte(SPI1,W25_read_data);
+
 												mem_addr = (W25_memBlock2>>16 & (0xFF));
 										SPI_SendByte(SPI1,mem_addr);
 												mem_addr = (W25_memBlock2>>8 & (0xFF));
 										SPI_SendByte(SPI1,mem_addr);
 												mem_addr = (W25_memBlock2 & (0xFF));
-										SPI_SendByte(SPI1,(mem_addr));		
-			SPI_ReceiveData(SPI1,data,4);
+										SPI_SendByte(SPI1,(mem_addr));	
+
+			SPI_ReceiveData(SPI1,data,5);
 	SPI_Disable(SPI1);
 	
 	delay();
@@ -110,19 +113,17 @@ void Flash_sendData(void)
 	SPI_Enable(SPI1);
 		W25_flash_enable(SPI1);
 	SPI_Disable(SPI1);
-	delay();
-		W25_Flash_read_status_reg();
-																delay();
+		delay();
 		SPI_Enable(SPI1);
 			SPI_SendByte(SPI1,W25_page_program);
-	
+
 												mem_addr = (W25_memBlock2>>16 & (0xFF));
 										SPI_SendByte(SPI1,mem_addr);
 												mem_addr = (W25_memBlock2>>8 & (0xFF));
 										SPI_SendByte(SPI1,mem_addr);
 												mem_addr = (W25_memBlock2 & (0xFF));
 										SPI_SendByte(SPI1,(mem_addr));		
-										
+		
 			SPI_SendData(SPI1,senddata,sizeof(senddata));
 	SPI_Disable(SPI1);
 	
