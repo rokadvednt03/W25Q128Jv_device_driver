@@ -31,12 +31,16 @@
 #define W25_reset1	0x66
 #define W25_reset2	0x99
 
-#define W25_memBlock2 0x000000
+#define W25_memBlock2 0x800000
 
 void W25_flash_enable(SPI_TypeDef *pSPIx);
 uint8_t W25_flash_read_statusREG(SPI_TypeDef *pSPIx ,uint8_t RegADDR);
 void W25_flash_erase(SPI_TypeDef *pSPIx);
 void W25_flash_reset(SPI_TypeDef *pSPIx);
+
+void W25_flash_eraseblock(SPI_TypeDef *pSPIx , uint32_t memory_addr);
+void W25_flash_WriteMemory(SPI_TypeDef *pSPIx , uint8_t *pTXBuffer , uint32_t len , uint32_t memory_addr);
+void W25_flash_readMemory(SPI_TypeDef *pSPIx , uint8_t *pRxBuffer , uint32_t len , uint32_t memory_addr);
 
 void SPI_SendByte(SPI_TypeDef *pSPIx,uint8_t byte);
 void delay(void);

@@ -154,6 +154,7 @@ void GPIO_PinEnDn(GPIO_TypeDef *pGPIOx,uint32_t PinNumber,uint32_t EnorDi)
 			gpio.GPIO_PinConfig.GPIO_ModeInOut = GPIO_OUT_50MHZ;
 			gpio.GPIO_PinConfig.GPIO_PinNumber = PinNumber;
 			GPIO_Init(&gpio);
+			pGPIOx->ODR &= ~(1 << PinNumber);
 		}
 		else
 		{
