@@ -44,3 +44,4 @@ void W25_flash_readMemory(SPI_TypeDef *pSPIx , uint8_t *pRxBuffer , uint32_t len
 
 void SPI_SendByte(SPI_TypeDef *pSPIx,uint8_t byte);
 void delay(void);
+void w25_erase_call_delay(void);

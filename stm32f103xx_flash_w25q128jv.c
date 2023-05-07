@@ -50,6 +50,7 @@ void SPI_SendByte(SPI_TypeDef *pSPIx,uint8_t byte)
 void W25_flash_eraseblock(SPI_TypeDef *pSPIx , uint32_t memory_addr)
 {
 	uint8_t memAddr;
+	W25_flash_enable(pSPIx);
 	delay();
 	SPI_Enable(pSPIx);
 				SPI_SendByte(pSPIx,W25_block_erase_64K);
@@ -61,6 +62,7 @@ void W25_flash_eraseblock(SPI_TypeDef *pSPIx , uint32_t memory_addr)
 				SPI_SendByte(pSPIx,memAddr);
 										
 	SPI_Disable(pSPIx);
+	w25_erase_call_delay();
 }
 
 
@@ -87,8 +89,8 @@ void W25_flash_WriteMemory(SPI_TypeDef *pSPIx , uint8_t *pTXBuffer , uint32_t le
 void W25_flash_readMemory(SPI_TypeDef *pSPIx , uint8_t *pRxBuffer , uint32_t len , uint32_t memory_addr)
 {
 	uint8_t memAddr;
+	W25_flash_enable(pSPIx);
 	delay();
-	
 	SPI_Enable(pSPIx);
 				SPI_SendByte(pSPIx,W25_read_data);
 										memAddr = ((memory_addr >> 16) & (0xff));
@@ -104,6 +106,19 @@ void W25_flash_readMemory(SPI_TypeDef *pSPIx , uint8_t *pRxBuffer , uint32_t len
 
 
 void delay(void)
+{ 
+	int i ;
+	for(i = 0 ; i < 81 ; i++);
+}
+
+
+
+void w25_erase_call_delay(void)
 {
-	for(int i = 0 ; i < 50 ; i++);
+	int ff ,de ;
+	for( ff = 0 ; ff < 200 ; ff++)
+		{
+							for( de = 0 ; de < 81 ; de++)
+							delay();
+		}
 }
